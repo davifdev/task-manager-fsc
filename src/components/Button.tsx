@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const button = tv({
-  base: "flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-sm cursor-pointer hover:opacity-75 transition-all",
+  base: "flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-md cursor-pointer hover:opacity-75 transition-all",
   variants: {
     color: {
       primary: "text-white bg-primary",

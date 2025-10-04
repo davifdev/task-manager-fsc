@@ -17,6 +17,7 @@
   --color-primary: #00adb5;
   --color-process: #ffaa04;
   --color-danger: #ef4444;
+  --color-border-gray: #F4F4F5;
 }
 
 @layer base {

@@ -1,28 +1,30 @@
-import { AddIcon, TrashIcon } from "../assets/icons";
-import Button from "./Button";
+import { CloudSunIcon, MoonIcon, SunIcon } from "../assets/icons";
+
+import Header from "./Header";
+import TaskItem from "./TaskItem";
+import TaskSeparator from "./TaskSeparator";
 
 const Tasks = () => {
   return (
     <section className="w-full space-y-6 px-9 py-16">
-      <div className="flex items-end justify-between">
-        <div className="space-y-2">
-          <span className="text-primary text-sm font-semibold">
-            Minhas Tarefas
-          </span>
-          <h2 className="text-dark-blue text-xl font-semibold">
-            Minhas Tarefas
-          </h2>
+      <Header title="Minhas Tarefas" subtitle="Minhas Tarefas" />
+      <div className="space-y-6 rounded-md bg-white p-6">
+        <div className="space-y-3">
+          <TaskSeparator text="Manhã" icon={<SunIcon />} />
+          <TaskItem />
+          <TaskItem />
         </div>
-        <div className="flex items-center gap-3">
-          <Button color="ghost">
-            Limpar tarefas <TrashIcon />
-          </Button>
-          <Button color="primary">
-            Nova tarefa <AddIcon />
-          </Button>
+        <div className="space-y-3">
+          <TaskSeparator text="Tarde" icon={<CloudSunIcon />} />
+          <TaskItem />
+          <TaskItem />
+        </div>
+        <div className="space-y-3">
+          <TaskSeparator text="Noite" icon={<MoonIcon />} />
+          <TaskItem />
+          <TaskItem />
         </div>
       </div>
-      <div></div>
     </section>
   );
 };
