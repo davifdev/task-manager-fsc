@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
-const button = tv({
+const sidebarButton = tv({
   base: "py-3 px-6 rounded-xl  flex items-center gap-2 text-sm",
   variants: {
     color: {
@@ -11,7 +11,7 @@ const button = tv({
   },
 });
 
-type SidebarButtonVariants = VariantProps<typeof button>;
+type SidebarButtonVariants = VariantProps<typeof sidebarButton>;
 
 interface SidebarButtonProps extends SidebarButtonVariants {
   children: ReactNode;
@@ -19,7 +19,7 @@ interface SidebarButtonProps extends SidebarButtonVariants {
 
 const SidebarButton = ({ color, children }: SidebarButtonProps) => {
   return (
-    <a href="#" className={button({ color })}>
+    <a href="#" className={sidebarButton({ color })}>
       {children}
     </a>
   );

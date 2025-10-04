@@ -6,7 +6,7 @@
   --font-poppins: "Poppins", sans-serif;
   --color-gray-bg: #f8f8f8;
   --primary-opacity: --alpha(#00adb5 / 10%);
-  --process-opacity: ;
+  --process-opacity:  --alpha(#ffaa04 / 10%);
 }
 
 @theme {

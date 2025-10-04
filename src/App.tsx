@@ -1,12 +1,7 @@
-import Sidebar from "./components/Sidebar";
+import TasksPage from "./pages/TasksPage";
 
 const App = () => {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <h2 className="text-danger">Hello World!</h2>
-    </div>
-  );
+  return <TasksPage />;
 };
 
 export default App;
