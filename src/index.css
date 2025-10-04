@@ -7,6 +7,7 @@
   --color-gray-bg: #f8f8f8;
   --primary-opacity: --alpha(#00adb5 / 10%);
   --process-opacity:  --alpha(#ffaa04 / 10%);
+  --dark-blue-opacity:  --alpha(#35383e / 10%);
 }
 
 @theme {
