@@ -5,8 +5,10 @@ import Button from "./Button";
 
 interface TaskItemProps {
   task: TaskModel;
+  handleDelete: (taskId: string) => void;
+  handleStatus: (taskId: string) => void;
 }
-const TaskItem = ({ task }: TaskItemProps) => {
+const TaskItem = ({ task, handleDelete, handleStatus }: TaskItemProps) => {
   const itemColors: DefaultColors = {
     done: "bg-[var(--primary-opacity)]",
     in_progress: "bg-[var(--process-opacity)]",
@@ -39,6 +41,7 @@ const TaskItem = ({ task }: TaskItemProps) => {
             id="status"
             checked={task.status === "done"}
             className="absolute top-0 left-0 h-full w-full cursor-pointer opacity-0"
+            onChange={() => handleStatus(task.id)}
           />
           {task.status === "done" && <CheckIcon />}
           {task.status === "in_progress" && (
@@ -46,13 +49,13 @@ const TaskItem = ({ task }: TaskItemProps) => {
           )}
         </label>
         <p
-          className={`text-md ${textColors[task.status as keyof typeof textColors]}`}
+          className={`text-sm ${textColors[task.status as keyof typeof textColors]}`}
         >
           {task.title}
         </p>
       </div>
       <div className="flex items-center">
-        <Button color="ghost">
+        <Button color="ghost" onClick={() => handleDelete(task.id)}>
           <TrashIcon />
         </Button>
         <a href="#">
