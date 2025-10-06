@@ -33,12 +33,12 @@ const TaskItem = ({ task, handleDelete, handleStatus }: TaskItemProps) => {
     >
       <div className="flex items-center gap-3">
         <label
-          htmlFor="status"
+          htmlFor={task.id}
           className={`relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-md ${checkboxColors[task.status as keyof typeof checkboxColors]}`}
         >
           <input
             type="checkbox"
-            id="status"
+            id={task.id}
             checked={task.status === "done"}
             className="absolute top-0 left-0 h-full w-full cursor-pointer opacity-0"
             onChange={() => handleStatus(task.id)}
@@ -55,11 +55,15 @@ const TaskItem = ({ task, handleDelete, handleStatus }: TaskItemProps) => {
         </p>
       </div>
       <div className="flex items-center">
-        <Button color="ghost" onClick={() => handleDelete(task.id)}>
+        <Button
+          color="ghost"
+          size="small"
+          onClick={() => handleDelete(task.id)}
+        >
           <TrashIcon />
         </Button>
-        <a href="#">
-          <DetailsIcon />
+        <a href="#" className="transition-all hover:opacity-75">
+          <DetailsIcon className="text-dark-gray" />
         </a>
       </div>
     </div>

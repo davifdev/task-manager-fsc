@@ -6,6 +6,41 @@
       "time": "morning",
       "status": "not_started",
       "description": "Estudar progamação por 2 horas"
+    },
+    {
+      "id": "2",
+      "title": "Criação de Landpages",
+      "time": "afternoon",
+      "status": "not_started",
+      "description": "Estudar progamação por 2 horas"
+    },
+    {
+      "id": "3",
+      "title": "Leitura",
+      "time": "evening",
+      "status": "not_started",
+      "description": "Ler durante 30 min"
+    },
+    {
+      "id": "d09a6494-0618-4ffb-a8b9-ce1e5ecd8127",
+      "title": "Correr 5 KM ",
+      "time": "morning",
+      "status": "not_started",
+      "description": "correr 5km pela manhã"
+    },
+    {
+      "id": "da5dd1d2-4f99-4204-a716-e90c3bfba3b9",
+      "title": "Progamar ",
+      "time": "afternoon",
+      "status": "not_started",
+      "description": "Progamar durante 4 horas"
+    },
+    {
+      "id": "3a021d18-e3f6-406e-b5a8-5c150f47e543",
+      "title": "Assistir Aula",
+      "time": "evening",
+      "status": "not_started",
+      "description": "Assistir aulas da faculdade"
     }
   ]
 }

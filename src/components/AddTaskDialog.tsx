@@ -5,14 +5,45 @@ import Input from "./Input";
 import InputSelect from "./InputSelect";
 import { useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import type { TaskModel } from "../models/TaskModel";
+import { v4 } from "uuid";
+import { showMessage } from "../adapters/showMessage";
 
 interface AddTaskDialogProps {
   isOpen: boolean;
   handleClose: () => void;
+  handleSubmit: (newTask: TaskModel) => void;
 }
 
-const AddTaskDialog = ({ isOpen, handleClose }: AddTaskDialogProps) => {
+const AddTaskDialog = ({
+  isOpen,
+  handleClose,
+  handleSubmit,
+}: AddTaskDialogProps) => {
   const nodeRef = useRef<null | HTMLDivElement>(null);
+  const titleRef = useRef<null | HTMLInputElement>(null);
+  const timeRef = useRef<null | HTMLSelectElement>(null);
+  const descriptionRef = useRef<null | HTMLInputElement>(null);
+
+  const handleAddTask = () => {
+    showMessage.dismiss();
+    const title = titleRef.current?.value;
+    const time = timeRef.current?.value;
+    const description = descriptionRef.current?.value;
+    console.log(title, time, description);
+
+    if (!title || !time || !description) return;
+
+    handleSubmit({
+      id: v4(),
+      title,
+      time,
+      status: "not_started",
+      description,
+    });
+
+    handleClose();
+  };
 
   return (
     <CSSTransition
@@ -37,12 +68,18 @@ const AddTaskDialog = ({ isOpen, handleClose }: AddTaskDialogProps) => {
                   Insira as informações abaixo
                 </p>
               </div>
-              <Input title="Título" placeholder="Título da tarefa" id="title" />
-              <InputSelect title="Horário" id="time" />
+              <Input
+                title="Título"
+                placeholder="Título da tarefa"
+                id="title"
+                ref={titleRef}
+              />
+              <InputSelect title="Horário" id="time" ref={timeRef} />
               <Input
                 title="Descrição"
                 placeholder="Descrição da tarefa"
                 id="desc"
+                ref={descriptionRef}
               />
               <div className="flex items-center gap-3">
                 <Button
@@ -53,7 +90,12 @@ const AddTaskDialog = ({ isOpen, handleClose }: AddTaskDialogProps) => {
                 >
                   Cancelar
                 </Button>
-                <Button color="primary" size="large" width="full">
+                <Button
+                  color="primary"
+                  size="large"
+                  width="full"
+                  onClick={handleAddTask}
+                >
                   Salvar
                 </Button>
               </div>

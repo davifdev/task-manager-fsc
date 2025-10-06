@@ -2,13 +2,15 @@ import { useState } from "react";
 import { AddIcon, TrashIcon } from "../assets/icons";
 import AddTaskDialog from "./AddTaskDialog";
 import Button from "./Button";
+import type { TaskModel } from "../models/TaskModel";
 
 interface HeaderProps {
   title: string;
   subtitle: string;
+  handleSubmit: (newTask: TaskModel) => void;
 }
 
-const Header = ({ title, subtitle }: HeaderProps) => {
+const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => {
@@ -40,7 +42,11 @@ const Header = ({ title, subtitle }: HeaderProps) => {
           Nova tarefa <AddIcon />
         </Button>
 
-        <AddTaskDialog isOpen={isOpen} handleClose={handleClose} />
+        <AddTaskDialog
+          isOpen={isOpen}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </div>
   );

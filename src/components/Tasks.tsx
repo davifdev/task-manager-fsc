@@ -29,6 +29,7 @@ const Tasks = () => {
   const tasksEvening = tasks?.filter((task) => task.time === "evening");
 
   const handleDeleteTask = async (taskId: string) => {
+    showMessage.dismiss();
     const newTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(newTasks);
 
@@ -37,7 +38,7 @@ const Tasks = () => {
     });
 
     if (!response.ok) {
-      console.log("Erro ao deletar tarefa!");
+      showMessage.error("Erro ao deletar tarefa!");
       return;
     }
 
@@ -45,8 +46,10 @@ const Tasks = () => {
   };
 
   const handleStatusTask = async (taskId: string) => {
+    console.log(taskId);
     const newTask = tasks.map((task) => {
       if (task.id !== taskId) return task;
+      showMessage.dismiss();
 
       if (task.status === "done") {
         showMessage.success("Tarefa reiniciada com sucesso");
@@ -66,8 +69,10 @@ const Tasks = () => {
       return task;
     });
 
+    setTasks(newTask);
+
     const newTaskStatus = newTask.filter((task) => task.id === taskId)[0];
-    console.log(newTaskStatus);
+
     const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
       method: "PATCH",
       headers: {
@@ -79,13 +84,33 @@ const Tasks = () => {
       showMessage.error("Não foi possível atualizar status");
       return;
     }
+  };
 
-    setTasks(newTask);
+  const handleSubmitTask = async (newTask: TaskModel) => {
+    showMessage.dismiss();
+    setTasks([...tasks, newTask]);
+
+    const response = await fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTask),
+    });
+    if (!response.ok) {
+      showMessage.error("Erro ao criar tarefa");
+    }
+
+    showMessage.success("Tarefa criada com sucesso");
   };
 
   return (
     <section className="w-full space-y-6 px-9 py-16">
-      <Header title="Minhas Tarefas" subtitle="Minhas Tarefas" />
+      <Header
+        title="Minhas Tarefas"
+        subtitle="Minhas Tarefas"
+        handleSubmit={handleSubmitTask}
+      />
       <div className="space-y-6 rounded-md bg-white p-6">
         <div className="space-y-3">
           <TaskSeparator text="Manhã" icon={<SunIcon />} />
