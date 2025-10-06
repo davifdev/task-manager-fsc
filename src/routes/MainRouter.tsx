@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import TasksPage from "../pages/TasksPage";
-import TasksDetails from "../pages/TaskDetails";
+import TasksDetailsPage from "../pages/TaskDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +9,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/tasks/:taskId",
-    element: <TasksDetails />,
+    element: <TasksDetailsPage />,
   },
 ]);
 
