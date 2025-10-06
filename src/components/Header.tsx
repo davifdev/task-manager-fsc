@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { AddIcon, TrashIcon } from "../assets/icons";
+import AddTaskDialog from "./AddTaskDialog";
 import Button from "./Button";
 
 interface HeaderProps {
@@ -7,6 +9,12 @@ interface HeaderProps {
 }
 
 const Header = ({ title, subtitle }: HeaderProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="flex items-end justify-between">
       <div className="space-y-2">
@@ -16,6 +24,7 @@ const Header = ({ title, subtitle }: HeaderProps) => {
       <div className="flex items-center gap-3">
         <Button
           color="ghost"
+          size="small"
           title="Excluir Tarefas"
           aria-label="Excluir Tarefas"
         >
@@ -23,11 +32,15 @@ const Header = ({ title, subtitle }: HeaderProps) => {
         </Button>
         <Button
           color="primary"
+          size="small"
           title="Criar Nova Tarefa"
           aria-label="Criar Nova Tarefa"
+          onClick={() => setIsOpen(true)}
         >
           Nova tarefa <AddIcon />
         </Button>
+
+        <AddTaskDialog isOpen={isOpen} handleClose={handleClose} />
       </div>
     </div>
   );
