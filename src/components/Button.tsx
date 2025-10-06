@@ -28,7 +28,6 @@ type ButtonAllProps = ButtonVariants & ButtonAttributes;
 
 interface ButtonProps extends ButtonAllProps {
   children: ReactNode;
-  disabled: boolean;
 }
 
 const Button = ({ children, color, size, width, ...props }: ButtonProps) => {

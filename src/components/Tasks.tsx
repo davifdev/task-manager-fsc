@@ -9,6 +9,7 @@ import { showMessage } from "../adapters/showMessage";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<TaskModel[]>([]);
+
   useEffect(() => {
     const fetchTasks = async () => {
       const response = await fetch("http://localhost:3000/tasks");
@@ -80,18 +81,6 @@ const Tasks = () => {
   const handleSubmitTask = async (newTask: TaskModel) => {
     showMessage.dismiss();
     setTasks([...tasks, newTask]);
-
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newTask),
-    });
-    if (!response.ok) {
-      showMessage.error("Erro ao criar tarefa");
-    }
-
     showMessage.success("Tarefa criada com sucesso");
   };
 

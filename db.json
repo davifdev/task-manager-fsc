@@ -20,6 +20,27 @@
       "time": "evening",
       "status": "not_started",
       "description": "Ler 30min antes de dormir"
+    },
+    {
+      "id": "c6ec7b17-fcae-4610-b4d6-94f6b7ab98f0",
+      "title": "Progamação",
+      "time": "afternoon",
+      "status": "not_started",
+      "description": "Progamar durante 4 horas"
+    },
+    {
+      "id": "22b833c6-f9f5-4880-bb32-efaa1872c365",
+      "title": "Corrida",
+      "time": "morning",
+      "status": "not_started",
+      "description": "correr 5km pela manhã"
+    },
+    {
+      "id": "49f6240f-e381-4b1d-b567-0f5991a1b939",
+      "title": "Assistir Aulas",
+      "time": "evening",
+      "status": "not_started",
+      "description": "Assistir aulas da faculdade"
     }
   ]
 }
