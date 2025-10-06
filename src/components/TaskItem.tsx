@@ -2,13 +2,18 @@ import { CheckIcon, DetailsIcon, LoaderIcon, TrashIcon } from "../assets/icons";
 import { type TaskModel } from "../models/TaskModel";
 import { type DefaultColors } from "../models/TaskColors";
 import Button from "./Button";
+import { showMessage } from "../adapters/showMessage";
+import { useState } from "react";
 
 interface TaskItemProps {
   task: TaskModel;
-  handleDelete: (taskId: string) => void;
+  onSuccess: (taskId: string) => void;
   handleStatus: (taskId: string) => void;
 }
-const TaskItem = ({ task, handleDelete, handleStatus }: TaskItemProps) => {
+
+const TaskItem = ({ task, onSuccess, handleStatus }: TaskItemProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const itemColors: DefaultColors = {
     done: "bg-[var(--primary-opacity)]",
     in_progress: "bg-[var(--process-opacity)]",
@@ -26,6 +31,22 @@ const TaskItem = ({ task, handleDelete, handleStatus }: TaskItemProps) => {
     in_progress: "text-process",
     not_started: "text-dark-blue",
   } as const;
+
+  const onDeleteTask = async () => {
+    setIsLoading(true);
+    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      setIsLoading(false);
+      showMessage.error("Erro ao deletar tarefa!");
+      return;
+    }
+
+    setIsLoading(false);
+    onSuccess(task.id);
+  };
 
   return (
     <div
@@ -58,9 +79,14 @@ const TaskItem = ({ task, handleDelete, handleStatus }: TaskItemProps) => {
         <Button
           color="ghost"
           size="small"
-          onClick={() => handleDelete(task.id)}
+          disabled={isLoading}
+          onClick={onDeleteTask}
         >
-          <TrashIcon />
+          {isLoading ? (
+            <LoaderIcon className="text-text-gray animate-spin" />
+          ) : (
+            <TrashIcon />
+          )}
         </Button>
         <a href="#" className="transition-all hover:opacity-75">
           <DetailsIcon className="text-dark-gray" />

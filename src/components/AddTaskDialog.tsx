@@ -74,7 +74,12 @@ const AddTaskDialog = ({
                 id="title"
                 ref={titleRef}
               />
-              <InputSelect title="Horário" id="time" ref={timeRef} />
+              <InputSelect
+                title="Horário"
+                id="time"
+                ref={timeRef}
+                defaultValue={"morning"}
+              />
               <Input
                 title="Descrição"
                 placeholder="Descrição da tarefa"

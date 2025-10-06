@@ -16,6 +16,9 @@ const button = tv({
     width: {
       full: "w-full",
     },
+    disabled: {
+      true: "opacity-70 cursor-not-allowed hover:opacity-70",
+    },
   },
 });
 
@@ -25,11 +28,15 @@ type ButtonAllProps = ButtonVariants & ButtonAttributes;
 
 interface ButtonProps extends ButtonAllProps {
   children: ReactNode;
+  disabled: boolean;
 }
 
 const Button = ({ children, color, size, width, ...props }: ButtonProps) => {
   return (
-    <button className={button({ color, size, width })} {...props}>
+    <button
+      className={button({ color, size, width, disabled: props.disabled })}
+      {...props}
+    >
       {children}
     </button>
   );

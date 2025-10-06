@@ -33,15 +33,6 @@ const Tasks = () => {
     const newTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(newTasks);
 
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      showMessage.error("Erro ao deletar tarefa!");
-      return;
-    }
-
     showMessage.success("Tarefa deletada com sucesso!");
   };
 
@@ -118,7 +109,7 @@ const Tasks = () => {
             <TaskItem
               task={task}
               key={task.id}
-              handleDelete={handleDeleteTask}
+              onSuccess={handleDeleteTask}
               handleStatus={handleStatusTask}
             />
           ))}
@@ -129,7 +120,7 @@ const Tasks = () => {
             <TaskItem
               task={task}
               key={task.id}
-              handleDelete={handleDeleteTask}
+              onSuccess={handleDeleteTask}
               handleStatus={handleStatusTask}
             />
           ))}
@@ -140,7 +131,7 @@ const Tasks = () => {
             <TaskItem
               task={task}
               key={task.id}
-              handleDelete={handleDeleteTask}
+              onSuccess={handleDeleteTask}
               handleStatus={handleStatusTask}
             />
           ))}

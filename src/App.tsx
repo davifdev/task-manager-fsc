@@ -4,7 +4,13 @@ import TasksPage from "./pages/TasksPage";
 const App = () => {
   return (
     <>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          style: {
+            color: "#35383e",
+          },
+        }}
+      />
       <TasksPage />
     </>
   );
