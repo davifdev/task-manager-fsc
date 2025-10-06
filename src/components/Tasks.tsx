@@ -6,6 +6,7 @@ import TaskItem from "./TaskItem";
 import TaskSeparator from "./TaskSeparator";
 import type { TaskModel } from "../models/TaskModel";
 import { showMessage } from "../adapters/showMessage";
+import SectionWrapper from "./SectionWrapper";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<TaskModel[]>([]);
@@ -85,7 +86,7 @@ const Tasks = () => {
   };
 
   return (
-    <section className="w-full space-y-6 px-9 py-16">
+    <SectionWrapper>
       <Header
         title="Minhas Tarefas"
         subtitle="Minhas Tarefas"
@@ -126,7 +127,7 @@ const Tasks = () => {
           ))}
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 };
 

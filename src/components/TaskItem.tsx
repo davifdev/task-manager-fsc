@@ -4,6 +4,7 @@ import { type DefaultColors } from "../models/TaskColors";
 import Button from "./Button";
 import { showMessage } from "../adapters/showMessage";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface TaskItemProps {
   task: TaskModel;
@@ -88,9 +89,12 @@ const TaskItem = ({ task, onSuccess, handleStatus }: TaskItemProps) => {
             <TrashIcon />
           )}
         </Button>
-        <a href="#" className="transition-all hover:opacity-75">
+        <Link
+          to={`/tasks/${task.id}`}
+          className="transition-all hover:opacity-75"
+        >
           <DetailsIcon className="text-dark-gray" />
-        </a>
+        </Link>
       </div>
     </div>
   );

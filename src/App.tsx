@@ -1,18 +1,11 @@
-import { Toaster } from "sonner";
-import TasksPage from "./pages/TasksPage";
+import MessageContainer from "./components/MessageContainer";
+import MainRouter from "./routes/MainRouter";
 
 const App = () => {
   return (
-    <>
-      <Toaster
-        toastOptions={{
-          style: {
-            color: "#35383e",
-          },
-        }}
-      />
-      <TasksPage />
-    </>
+    <MessageContainer>
+      <MainRouter />
+    </MessageContainer>
   );
 };
 
