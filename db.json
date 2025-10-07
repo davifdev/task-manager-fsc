@@ -2,7 +2,7 @@
   "tasks": [
     {
       "id": "dc17a8bb-e401-4442-9d01-35d2cb00e4d1",
-      "title": "Estudar Progamação",
+      "title": " Estudar Progamação",
       "time": "morning",
       "status": "not_started",
       "description": "Estudar progamação durante 2 horas"
@@ -16,8 +16,8 @@
     },
     {
       "id": "2991e662-0692-45ed-a467-704b24016843",
-      "title": "Leitura",
-      "time": "evening",
+      "title": "Leitura 30 min",
+      "time": "morning",
       "status": "not_started",
       "description": "Ler 30min antes de dormir"
     },

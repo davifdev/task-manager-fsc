@@ -1,13 +1,14 @@
 import type { ComponentProps } from "react";
 import LabelText from "./LabelText";
+import ErrorMessage from "./ErrorMessage";
 
 type InputAttributes = ComponentProps<"select">;
-
 interface InputSelectProps extends InputAttributes {
   title?: string;
+  errorMessage?: string;
 }
 
-const InputSelect = ({ title, ...props }: InputSelectProps) => {
+const InputSelect = ({ title, errorMessage, ...props }: InputSelectProps) => {
   return (
     <div className="flex flex-col gap-1">
       <LabelText id={props.id} title={title} />
@@ -19,6 +20,7 @@ const InputSelect = ({ title, ...props }: InputSelectProps) => {
         <option value="afternoon">Tarde</option>
         <option value="evening">Noite</option>
       </select>
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </div>
   );
 };

@@ -26,7 +26,6 @@ const button = tv({
 type ButtonVariants = VariantProps<typeof button>;
 type ButtonAttributes = ComponentProps<"button">;
 type ButtonAllProps = ButtonVariants & ButtonAttributes;
-
 interface ButtonProps extends ButtonAllProps {
   children: ReactNode;
 }

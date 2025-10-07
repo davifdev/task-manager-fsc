@@ -9,39 +9,58 @@ import SectionWrapper from "./SectionWrapper";
 import Button from "./Button";
 import Input from "./Input";
 import InputSelect from "./InputSelect";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { TaskModel } from "../models/TaskModel";
 import { showMessage } from "../adapters/showMessage";
+import { useForm, type SubmitHandler } from "react-hook-form";
+
+type FormValues = {
+  title: string;
+  time: string;
+  description: string;
+};
 
 const TasksDetails = () => {
   const { taskId } = useParams();
   const [task, setTask] = useState<TaskModel>();
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const titleRef = useRef<null | HTMLInputElement>(null);
-  const timeRef = useRef<null | HTMLSelectElement>(null);
-  const descriptionRef = useRef<null | HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: "",
+      time: "morning",
+      description: "",
+    },
+  });
 
   useEffect(() => {
     const fetchTask = async () => {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
       const task = await response.json();
+      reset({
+        title: task.title,
+        time: task.time,
+        description: task.description,
+      });
       setTask(task);
     };
 
     fetchTask();
-  }, [taskId]);
+  }, [taskId, reset]);
 
   const backPage = () => {
     navigate(-1);
   };
 
-  const handleUpdateTask = async () => {
-    setIsLoading(true);
-    const title = titleRef.current?.value;
-    const time = timeRef.current?.value;
-    const description = descriptionRef.current?.value;
+  const handleUpdateTask: SubmitHandler<FormValues> = async (data) => {
+    const title = data.title;
+    const time = data.time;
+    const description = data.description;
 
     const taskUpdated = {
       title,
@@ -58,7 +77,6 @@ const TasksDetails = () => {
     });
 
     if (!response.ok) {
-      setIsLoading(false);
       showMessage.success("Erro ao atualizar tarefa");
       return;
     }
@@ -66,10 +84,10 @@ const TasksDetails = () => {
     const newTask = await response.json();
     setTask(newTask);
 
-    setIsLoading(false);
     showMessage.success("Tarefa atualizada com sucesso");
   };
 
+  console.log(errors);
   return (
     <SectionWrapper>
       <div className="flex items-end justify-between">
@@ -101,42 +119,69 @@ const TasksDetails = () => {
           </div>
         </div>
         <div>
-          <Button size="small" color="danger">
+          <Button size="small" color="danger" disabled={isSubmitting}>
             Deletar tarefa <TrashIcon />
           </Button>
         </div>
       </div>
-      <div className="space-y-6 rounded-md bg-white p-6">
-        <Input
-          title="Título"
-          defaultValue={task?.title}
-          ref={titleRef}
-          disabled={isLoading}
-        />
-        <InputSelect
-          title="Horário"
-          defaultValue={task?.time}
-          ref={timeRef}
-          disabled={isLoading}
-        />
-        <Input
-          title="Descrição"
-          defaultValue={task?.description}
-          ref={descriptionRef}
-          disabled={isLoading}
-        />
-      </div>
-      <div className="flex justify-end">
-        <Button
-          color="primary"
-          size="large"
-          onClick={handleUpdateTask}
-          disabled={isLoading}
-        >
-          {isLoading && <LoaderIcon className="animate-spin" />}
-          Salvar
-        </Button>
-      </div>
+
+      <form onSubmit={handleSubmit(handleUpdateTask)}>
+        <div className="space-y-6 rounded-md bg-white p-6">
+          <Input
+            title="Título"
+            defaultValue={task?.title}
+            disabled={isSubmitting}
+            {...register("title", {
+              required: "O Título é obrigatório",
+              validate: (value) => {
+                if (!value.trim()) {
+                  return "O campo não pode ser vazio";
+                }
+              },
+            })}
+            errorMessage={errors.title?.message}
+          />
+          <InputSelect
+            title="Horário"
+            defaultValue={task?.time}
+            disabled={isSubmitting}
+            {...register("time", {
+              required: "O Horário é obrigatório",
+              validate: (value) => {
+                if (!value.trim()) {
+                  return "O campo não pode ser vazio";
+                }
+              },
+            })}
+            errorMessage={errors.time?.message}
+          />
+          <Input
+            title="Descrição"
+            defaultValue={task?.description}
+            disabled={isSubmitting}
+            {...register("description", {
+              required: "A Descrição é obrigatória",
+              validate: (value) => {
+                if (!value.trim()) {
+                  return "O campo não pode ser vazio";
+                }
+              },
+            })}
+            errorMessage={errors.description?.message}
+          />
+        </div>
+        <div className="mt-6 flex justify-end">
+          <Button
+            color="primary"
+            size="large"
+            disabled={isSubmitting}
+            type="submit"
+          >
+            {isSubmitting && <LoaderIcon className="animate-spin" />}
+            Salvar
+          </Button>
+        </div>
+      </form>
     </SectionWrapper>
   );
 };
