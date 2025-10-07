@@ -7,7 +7,7 @@ import type { TaskModel } from "../models/TaskModel";
 interface HeaderProps {
   title: string;
   subtitle: string;
-  handleSubmit: (newTask: TaskModel) => void;
+  handleSubmit?: (newTask: TaskModel) => void;
 }
 
 const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
@@ -45,7 +45,7 @@ const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
         <AddTaskDialog
           isOpen={isOpen}
           handleClose={handleClose}
-          onSuccess={handleSubmit}
+          onSuccess={handleSubmit ? handleSubmit : () => {}}
         />
       </div>
     </div>
