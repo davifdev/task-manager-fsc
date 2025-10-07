@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { NavLink } from "react-router-dom";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const sidebarButton = tv({
@@ -12,16 +13,21 @@ const sidebarButton = tv({
 });
 
 type SidebarButtonVariants = VariantProps<typeof sidebarButton>;
-
 interface SidebarButtonProps extends SidebarButtonVariants {
   children: ReactNode;
+  href: string;
 }
 
-const SidebarButton = ({ color, children }: SidebarButtonProps) => {
+const SidebarButton = ({ children, href }: SidebarButtonProps) => {
   return (
-    <a href="#" className={sidebarButton({ color })}>
+    <NavLink
+      to={href}
+      className={({ isActive }) =>
+        sidebarButton({ color: isActive ? "primary" : "ghost" })
+      }
+    >
       {children}
-    </a>
+    </NavLink>
   );
 };
 

@@ -1,0 +1,14 @@
+.task-dialog-enter {
+  opacity: 0;
+}
+.task-dialog-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.task-dialog-exit {
+  opacity: 1;
+}
+.task-dialog-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}

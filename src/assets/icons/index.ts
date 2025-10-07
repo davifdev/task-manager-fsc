@@ -11,6 +11,7 @@ import MoonIcon from "./moon.svg?react";
 import SunIcon from "./sun.svg?react";
 import TasksIcon from "./tasks.svg?react";
 import TrashIcon from "./trash.svg?react";
+import LayoutListIcon from "./layout-list.svg?react";
 
 export {
   AddIcon,
@@ -26,4 +27,5 @@ export {
   SunIcon,
   TasksIcon,
   TrashIcon,
+  LayoutListIcon,
 };

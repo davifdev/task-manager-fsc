@@ -1,46 +1,25 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "title": "Treino de musculação",
-      "time": "morning",
-      "status": "done",
-      "description": "Treinar musculação durante 1 hora"
-    },
-    {
-      "id": 2,
+      "id": "84b1d277-957c-44d2-aa5f-c6a09a37c12d",
       "title": "Estudar Progamação",
       "time": "morning",
-      "status": "done",
-      "description": "Estudar progamação durante 2 horas"
-    },
-    {
-      "id": 3,
-      "title": "Criar Landpages",
-      "time": "afternoon",
       "status": "in_progress",
-      "description": "Criação de Landpages Freelancer"
+      "description": "Estudar progamação durante 3 horas"
     },
     {
-      "id": 4,
-      "title": "Progamar",
-      "time": "afternoon",
-      "status": "in_progress",
-      "description": "Progamar durante 4 horas focado"
-    },
-    {
-      "id": 5,
+      "id": "0afb6e55-5f10-432b-af57-d17f624b3f89",
       "title": "Leitura Noturna",
       "time": "evening",
-      "status": "not_started",
-      "description": "Ler durante 30 min"
+      "status": "in_progress",
+      "description": "Leitura noturna"
     },
     {
-      "id": 6,
-      "title": "Planejamento",
-      "time": "evening",
-      "status": "not_started",
-      "description": "Planejamento do dia seguinte"
+      "id": "197df9d8-4fc6-40bd-8e4e-a487b2bf5a68",
+      "title": "Criar Landpages",
+      "time": "afternoon",
+      "status": "done",
+      "description": "Criação de landpages do codeboost"
     }
   ]
 }
