@@ -4,21 +4,21 @@
       "id": "84b1d277-957c-44d2-aa5f-c6a09a37c12d",
       "title": "Estudar Progamação",
       "time": "morning",
-      "status": "not_started",
+      "status": "in_progress",
       "description": "Estudar progamação durante 3 horas"
     },
     {
       "id": "0afb6e55-5f10-432b-af57-d17f624b3f89",
       "title": "Leitura Noturna",
       "time": "evening",
-      "status": "not_started",
+      "status": "in_progress",
       "description": "Leitura noturna"
     },
     {
       "id": "197df9d8-4fc6-40bd-8e4e-a487b2bf5a68",
       "title": "Criar Landpages",
       "time": "afternoon",
-      "status": "not_started",
+      "status": "done",
       "description": "Criação de landpages do codeboost"
     }
   ]
