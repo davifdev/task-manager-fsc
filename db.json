@@ -8,32 +8,32 @@
       "description": "Estudar progamação durante 2 horas"
     },
     {
-      "id": "4680c7c6-7a96-4556-8919-bed818671648",
-      "title": "Criação de Landpages",
+      "id": "63a4f6e3-f525-416b-a1f3-dc84f6a8542d",
+      "title": "Ciração de Landpages",
       "time": "afternoon",
       "status": "not_started",
-      "description": "Criar Landpages do curso codeboost"
+      "description": "Criação de landpages do codeboost"
     },
     {
-      "id": "2991e662-0692-45ed-a467-704b24016843",
-      "title": "Leitura 30 min",
-      "time": "morning",
-      "status": "not_started",
-      "description": "Ler 30min antes de dormir"
-    },
-    {
-      "id": "c6ec7b17-fcae-4610-b4d6-94f6b7ab98f0",
-      "title": "Progamação",
-      "time": "afternoon",
-      "status": "not_started",
-      "description": "Progamar durante 4 horas"
-    },
-    {
-      "id": "49f6240f-e381-4b1d-b567-0f5991a1b939",
-      "title": "Assistir Aulas",
+      "id": "e3278186-72a2-4dbb-a259-a04ef8e780b4",
+      "title": "Leitura",
       "time": "evening",
       "status": "not_started",
-      "description": "Assistir aulas da faculdade"
+      "description": "Leitura noturna"
+    },
+    {
+      "id": "ed901e4e-4d53-4848-9308-f678211ef793",
+      "title": "Corrida",
+      "time": "morning",
+      "status": "not_started",
+      "description": "Correr 5km"
+    },
+    {
+      "id": "8059a977-4dc2-448a-87ed-609f7b8842d8",
+      "title": "Progamar",
+      "time": "afternoon",
+      "status": "not_started",
+      "description": "Progamar 4 horas de foco"
     }
   ]
 }

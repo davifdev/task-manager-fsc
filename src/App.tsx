@@ -1,11 +1,16 @@
 import MessageContainer from "./components/MessageContainer";
 import MainRouter from "./routes/MainRouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <MessageContainer>
-      <MainRouter />
-    </MessageContainer>
+    <QueryClientProvider client={queryClient}>
+      <MessageContainer>
+        <MainRouter />
+      </MessageContainer>
+    </QueryClientProvider>
   );
 };
 

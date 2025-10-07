@@ -1,46 +1,40 @@
-import { useEffect, useState } from "react";
 import { CloudSunIcon, MoonIcon, SunIcon } from "../assets/icons";
-
 import Header from "./Header";
 import TaskItem from "./TaskItem";
 import TaskSeparator from "./TaskSeparator";
 import type { TaskModel } from "../models/TaskModel";
 import { showMessage } from "../adapters/showMessage";
 import SectionWrapper from "./SectionWrapper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState<TaskModel[]>([]);
-
-  useEffect(() => {
-    const fetchTasks = async () => {
+  const queryClient = useQueryClient();
+  const { data: tasks } = useQuery<TaskModel[]>({
+    queryKey: ["my-tasks"],
+    queryFn: async () => {
       const response = await fetch("http://localhost:3000/tasks");
       const tasks = await response.json();
-      setTasks(tasks);
-
       if (!response.ok) {
-        console.log("Erro ao buscar tarefas!");
-        return;
+        throw Error();
       }
-    };
-
-    fetchTasks();
-  }, []);
+      return tasks;
+    },
+  });
 
   const tasksMorning = tasks?.filter((task) => task.time === "morning");
   const tasksAfternoon = tasks?.filter((task) => task.time === "afternoon");
   const tasksEvening = tasks?.filter((task) => task.time === "evening");
 
   const handleDeleteTask = async (taskId: string) => {
+    queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+      return oldTasks.filter((oldTask) => oldTask.id !== taskId);
+    });
     showMessage.dismiss();
-    const newTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(newTasks);
-
     showMessage.success("Tarefa deletada com sucesso!");
   };
 
   const handleStatusTask = async (taskId: string) => {
-    console.log(taskId);
-    const newTask = tasks.map((task) => {
+    const newTask = tasks?.map((task) => {
       if (task.id !== taskId) return task;
       showMessage.dismiss();
 
@@ -62,9 +56,7 @@ const Tasks = () => {
       return task;
     });
 
-    setTasks(newTask);
-
-    const newTaskStatus = newTask.filter((task) => task.id === taskId)[0];
+    const newTaskStatus = newTask?.filter((task) => task.id === taskId)[0];
 
     const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
       method: "PATCH",
@@ -77,11 +69,23 @@ const Tasks = () => {
       showMessage.error("Não foi possível atualizar status");
       return;
     }
+
+    queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+      return oldTasks.map((oldTask) => {
+        if (oldTask.id === taskId) {
+          return newTaskStatus;
+        }
+        return oldTask;
+      });
+    });
   };
 
   const handleSubmitTask = async (newTask: TaskModel) => {
+    console.log(newTask);
+    queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+      return [...oldTasks, newTask];
+    });
     showMessage.dismiss();
-    setTasks([...tasks, newTask]);
     showMessage.success("Tarefa criada com sucesso");
   };
 
@@ -95,7 +99,7 @@ const Tasks = () => {
       <div className="space-y-6 rounded-md bg-white p-6">
         <div className="space-y-3">
           <TaskSeparator text="Manhã" icon={<SunIcon />} />
-          {tasksMorning.map((task) => (
+          {tasksMorning?.map((task) => (
             <TaskItem
               task={task}
               key={task.id}
@@ -106,7 +110,7 @@ const Tasks = () => {
         </div>
         <div className="space-y-3">
           <TaskSeparator text="Tarde" icon={<CloudSunIcon />} />
-          {tasksAfternoon.map((task) => (
+          {tasksAfternoon?.map((task) => (
             <TaskItem
               task={task}
               key={task.id}
@@ -117,7 +121,7 @@ const Tasks = () => {
         </div>
         <div className="space-y-3">
           <TaskSeparator text="Noite" icon={<MoonIcon />} />
-          {tasksEvening.map((task) => (
+          {tasksEvening?.map((task) => (
             <TaskItem
               task={task}
               key={task.id}
