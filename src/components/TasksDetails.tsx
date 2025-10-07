@@ -13,12 +13,7 @@ import { useEffect, useState } from "react";
 import type { TaskModel } from "../models/TaskModel";
 import { showMessage } from "../adapters/showMessage";
 import { useForm, type SubmitHandler } from "react-hook-form";
-
-type FormValues = {
-  title: string;
-  time: string;
-  description: string;
-};
+import type { FormValues } from "../models/FormValues";
 
 const TasksDetails = () => {
   const { taskId } = useParams();

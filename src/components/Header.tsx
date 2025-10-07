@@ -45,7 +45,7 @@ const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
         <AddTaskDialog
           isOpen={isOpen}
           handleClose={handleClose}
-          handleSubmit={handleSubmit}
+          onSuccess={handleSubmit}
         />
       </div>
     </div>
