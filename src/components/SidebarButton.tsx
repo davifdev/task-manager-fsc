@@ -13,7 +13,6 @@ const sidebarButton = tv({
 });
 
 type SidebarButtonVariants = VariantProps<typeof sidebarButton>;
-
 interface SidebarButtonProps extends SidebarButtonVariants {
   children: ReactNode;
   href: string;

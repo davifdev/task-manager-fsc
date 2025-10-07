@@ -5,14 +5,12 @@ import Button from "./Button";
 import { showMessage } from "../adapters/showMessage";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface TaskItemProps {
   task: TaskModel;
-  onSuccess: (taskId: string) => void;
-  handleStatus: (taskId: string) => void;
 }
 
-const TaskItem = ({ task, onSuccess, handleStatus }: TaskItemProps) => {
+const TaskItem = ({ task }: TaskItemProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const itemColors: DefaultColors = {
@@ -33,20 +31,88 @@ const TaskItem = ({ task, onSuccess, handleStatus }: TaskItemProps) => {
     not_started: "text-dark-blue",
   } as const;
 
-  const onDeleteTask = async () => {
-    setIsLoading(true);
-    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-      method: "DELETE",
+  const queryClient = useQueryClient();
+  const { mutate: deleteTask } = useMutation({
+    mutationKey: ["deleteTask", task.id],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw Error();
+      }
+      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+        return oldTasks.filter((oldTask) => oldTask.id !== task.id);
+      });
+    },
+  });
+
+  const handleDelete = async () => {
+    deleteTask(undefined, {
+      onSuccess: () => {
+        showMessage.success("Tarefa deletada com sucesso");
+      },
+      onError: () => {
+        showMessage.error("Erro ao deletar tarefa");
+      },
     });
 
-    if (!response.ok) {
-      setIsLoading(false);
-      showMessage.error("Erro ao deletar tarefa!");
-      return;
+    setIsLoading(false);
+  };
+
+  const getNewStatus = () => {
+    showMessage.dismiss();
+
+    if (task.status === "done") {
+      showMessage.success("Tarefa reiniciada com sucesso");
+      return "not_started";
     }
 
-    setIsLoading(false);
-    onSuccess(task.id);
+    if (task.status === "not_started") {
+      showMessage.success("Tarefa iniciada com sucesso");
+      return "in_progress";
+    }
+
+    if (task.status === "in_progress") {
+      showMessage.success("Tarefa concluída com sucesso");
+      return "done";
+    }
+  };
+
+  const { mutate: uptadeTask } = useMutation({
+    mutationKey: ["uptade-task", task.id],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          status: getNewStatus(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw Error();
+      }
+
+      const taskUpdated = await response.json();
+      const stateUpdated = taskUpdated.status;
+
+      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+        return oldTasks.map((oldTask) => {
+          if (oldTask.id === task.id) {
+            return { ...oldTask, status: stateUpdated };
+          }
+          return oldTask;
+        });
+      });
+    },
+  });
+
+  const handleStatus = () => {
+    uptadeTask(undefined, {
+      onError: () => {
+        showMessage.error("Erro ao atualizar tarefa");
+      },
+    });
   };
 
   return (
@@ -63,7 +129,7 @@ const TaskItem = ({ task, onSuccess, handleStatus }: TaskItemProps) => {
             id={task.id}
             checked={task.status === "done"}
             className="absolute top-0 left-0 h-full w-full cursor-pointer opacity-0"
-            onChange={() => handleStatus(task.id)}
+            onChange={handleStatus}
           />
           {task.status === "done" && <CheckIcon />}
           {task.status === "in_progress" && (
@@ -81,7 +147,7 @@ const TaskItem = ({ task, onSuccess, handleStatus }: TaskItemProps) => {
           color="ghost"
           size="small"
           disabled={isLoading}
-          onClick={onDeleteTask}
+          onClick={handleDelete}
         >
           {isLoading ? (
             <LoaderIcon className="text-text-gray animate-spin" />

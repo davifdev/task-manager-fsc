@@ -9,15 +9,14 @@ import SectionWrapper from "./SectionWrapper";
 import Button from "./Button";
 import Input from "./Input";
 import InputSelect from "./InputSelect";
-import { useEffect, useState } from "react";
-import type { TaskModel } from "../models/TaskModel";
 import { showMessage } from "../adapters/showMessage";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { FormValues } from "../models/FormValues";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { TaskModel } from "../models/TaskModel";
 
 const TasksDetails = () => {
   const { taskId } = useParams();
-  const [task, setTask] = useState<TaskModel>();
   const navigate = useNavigate();
 
   const {
@@ -33,8 +32,9 @@ const TasksDetails = () => {
     },
   });
 
-  useEffect(() => {
-    const fetchTask = async () => {
+  const { data: task } = useQuery({
+    queryKey: ["taskId", taskId],
+    queryFn: async () => {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
       const task = await response.json();
       reset({
@@ -42,15 +42,34 @@ const TasksDetails = () => {
         time: task.time,
         description: task.description,
       });
-      setTask(task);
-    };
-
-    fetchTask();
-  }, [taskId, reset]);
+      return task;
+    },
+  });
 
   const backPage = () => {
     navigate(-1);
   };
+
+  const queryClient = useQueryClient();
+  const { mutate: updateTask } = useMutation({
+    mutationKey: ["uptade-task", taskId],
+    mutationFn: async (taskUpdated: FormValues) => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(taskUpdated),
+      });
+
+      if (!response.ok) {
+        throw Error();
+      }
+
+      const newTask = await response.json();
+      return newTask;
+    },
+  });
 
   const handleUpdateTask: SubmitHandler<FormValues> = async (data) => {
     const title = data.title;
@@ -63,26 +82,46 @@ const TasksDetails = () => {
       description,
     };
 
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
+    updateTask(taskUpdated, {
+      onSuccess: () => {
+        queryClient.refetchQueries({ queryKey: ["taskId", taskId] });
+        showMessage.success("Tarefa atualizada com sucesso");
       },
-      body: JSON.stringify(taskUpdated),
+      onError: () => {
+        showMessage.error("Não foi possível atualizar a tarefa");
+      },
     });
-
-    if (!response.ok) {
-      showMessage.success("Erro ao atualizar tarefa");
-      return;
-    }
-
-    const newTask = await response.json();
-    setTask(newTask);
-
-    showMessage.success("Tarefa atualizada com sucesso");
   };
 
-  console.log(errors);
+  const { mutate: deleteTask } = useMutation({
+    mutationKey: ["deleteTask", taskId],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw Error();
+      }
+      const deleteTask = await response.json();
+
+      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+        return oldTasks.filter((oldTask) => oldTask.id !== deleteTask.id);
+      });
+    },
+  });
+
+  const handleDelete = async () => {
+    deleteTask(undefined, {
+      onSuccess: () => {
+        showMessage.success("Tarefa deletada com sucesso");
+        backPage();
+      },
+      onError: () => {
+        showMessage.error("Erro ao deletar tarefa");
+      },
+    });
+  };
+
   return (
     <SectionWrapper>
       <div className="flex items-end justify-between">
@@ -114,7 +153,12 @@ const TasksDetails = () => {
           </div>
         </div>
         <div>
-          <Button size="small" color="danger" disabled={isSubmitting}>
+          <Button
+            size="small"
+            color="danger"
+            disabled={isSubmitting}
+            onClick={handleDelete}
+          >
             Deletar tarefa <TrashIcon />
           </Button>
         </div>

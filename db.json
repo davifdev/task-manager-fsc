@@ -1,39 +1,25 @@
 {
   "tasks": [
     {
-      "id": "dc17a8bb-e401-4442-9d01-35d2cb00e4d1",
-      "title": " Estudar Progamação",
+      "id": "84b1d277-957c-44d2-aa5f-c6a09a37c12d",
+      "title": "Estudar Progamação",
       "time": "morning",
       "status": "not_started",
-      "description": "Estudar progamação durante 2 horas"
+      "description": "Estudar progamação durante 3 horas"
     },
     {
-      "id": "63a4f6e3-f525-416b-a1f3-dc84f6a8542d",
-      "title": "Ciração de Landpages",
-      "time": "afternoon",
-      "status": "not_started",
-      "description": "Criação de landpages do codeboost"
-    },
-    {
-      "id": "e3278186-72a2-4dbb-a259-a04ef8e780b4",
-      "title": "Leitura",
+      "id": "0afb6e55-5f10-432b-af57-d17f624b3f89",
+      "title": "Leitura Noturna",
       "time": "evening",
       "status": "not_started",
       "description": "Leitura noturna"
     },
     {
-      "id": "ed901e4e-4d53-4848-9308-f678211ef793",
-      "title": "Corrida",
-      "time": "morning",
-      "status": "not_started",
-      "description": "Correr 5km"
-    },
-    {
-      "id": "8059a977-4dc2-448a-87ed-609f7b8842d8",
-      "title": "Progamar",
+      "id": "197df9d8-4fc6-40bd-8e4e-a487b2bf5a68",
+      "title": "Criar Landpages",
       "time": "afternoon",
       "status": "not_started",
-      "description": "Progamar 4 horas de foco"
+      "description": "Criação de landpages do codeboost"
     }
   ]
 }

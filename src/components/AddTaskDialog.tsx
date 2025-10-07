@@ -11,18 +11,14 @@ import { showMessage } from "../adapters/showMessage";
 import { LoaderIcon } from "../assets/icons";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { FormValues } from "../models/FormValues";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface AddTaskDialogProps {
   isOpen: boolean;
   handleClose: () => void;
   onSuccess: (newTask: TaskModel) => void;
 }
 
-const AddTaskDialog = ({
-  isOpen,
-  handleClose,
-  onSuccess,
-}: AddTaskDialogProps) => {
+const AddTaskDialog = ({ isOpen, handleClose }: AddTaskDialogProps) => {
   const nodeRef = useRef<null | HTMLDivElement>(null);
   const {
     register,
@@ -31,9 +27,28 @@ const AddTaskDialog = ({
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
-  const handleAddTask: SubmitHandler<FormValues> = async (data) => {
-    showMessage.dismiss();
+  const queryClient = useQueryClient();
+  const { mutate: addTask } = useMutation({
+    mutationKey: ["add-task"],
+    mutationFn: async (newTask: TaskModel) => {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+      if (!response.ok) {
+        throw Error();
+      }
+      const createdTask = await response.json();
+      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
+        return [...oldTasks, createdTask];
+      });
+    },
+  });
 
+  const handleAddTask: SubmitHandler<FormValues> = async (data) => {
     const title = data?.title;
     const time = data?.time;
     const description = data?.description;
@@ -46,23 +61,21 @@ const AddTaskDialog = ({
       description,
     };
 
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    addTask(newTask, {
+      onSuccess: () => {
+        showMessage.dismiss();
+        showMessage.success("Tarefa criada com sucesso");
+        handleClose();
+        reset({
+          title: "",
+          time: "morning",
+          description: "",
+        });
       },
-      body: JSON.stringify(newTask),
-    });
-    if (!response.ok) {
-      showMessage.error("Erro ao criar tarefa");
-    }
-
-    onSuccess(newTask);
-    handleClose();
-    reset({
-      title: "",
-      time: "morning",
-      description: "",
+      onError: () => {
+        showMessage.dismiss();
+        showMessage.error("Erro ao adicionar tarefa");
+      },
     });
   };
 

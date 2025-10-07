@@ -3,12 +3,11 @@ import Header from "./Header";
 import TaskItem from "./TaskItem";
 import TaskSeparator from "./TaskSeparator";
 import type { TaskModel } from "../models/TaskModel";
-import { showMessage } from "../adapters/showMessage";
+
 import SectionWrapper from "./SectionWrapper";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const Tasks = () => {
-  const queryClient = useQueryClient();
   const { data: tasks } = useQuery<TaskModel[]>({
     queryKey: ["my-tasks"],
     queryFn: async () => {
@@ -25,109 +24,26 @@ const Tasks = () => {
   const tasksAfternoon = tasks?.filter((task) => task.time === "afternoon");
   const tasksEvening = tasks?.filter((task) => task.time === "evening");
 
-  const handleDeleteTask = async (taskId: string) => {
-    queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-      return oldTasks.filter((oldTask) => oldTask.id !== taskId);
-    });
-    showMessage.dismiss();
-    showMessage.success("Tarefa deletada com sucesso!");
-  };
-
-  const handleStatusTask = async (taskId: string) => {
-    const newTask = tasks?.map((task) => {
-      if (task.id !== taskId) return task;
-      showMessage.dismiss();
-
-      if (task.status === "done") {
-        showMessage.success("Tarefa reiniciada com sucesso");
-        return { ...task, status: "not_started" };
-      }
-
-      if (task.status === "not_started") {
-        showMessage.success("Tarefa iniciada com sucesso");
-        return { ...task, status: "in_progress" };
-      }
-
-      if (task.status === "in_progress") {
-        showMessage.success("Tarefa concluída com sucesso");
-        return { ...task, status: "done" };
-      }
-
-      return task;
-    });
-
-    const newTaskStatus = newTask?.filter((task) => task.id === taskId)[0];
-
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newTaskStatus),
-    });
-    if (!response.ok) {
-      showMessage.error("Não foi possível atualizar status");
-      return;
-    }
-
-    queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-      return oldTasks.map((oldTask) => {
-        if (oldTask.id === taskId) {
-          return newTaskStatus;
-        }
-        return oldTask;
-      });
-    });
-  };
-
-  const handleSubmitTask = async (newTask: TaskModel) => {
-    console.log(newTask);
-    queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-      return [...oldTasks, newTask];
-    });
-    showMessage.dismiss();
-    showMessage.success("Tarefa criada com sucesso");
-  };
-
   return (
     <SectionWrapper>
-      <Header
-        title="Minhas Tarefas"
-        subtitle="Minhas Tarefas"
-        handleSubmit={handleSubmitTask}
-      />
+      <Header title="Minhas Tarefas" subtitle="Minhas Tarefas" />
       <div className="space-y-6 rounded-md bg-white p-6">
         <div className="space-y-3">
           <TaskSeparator text="Manhã" icon={<SunIcon />} />
           {tasksMorning?.map((task) => (
-            <TaskItem
-              task={task}
-              key={task.id}
-              onSuccess={handleDeleteTask}
-              handleStatus={handleStatusTask}
-            />
+            <TaskItem task={task} key={task.id} />
           ))}
         </div>
         <div className="space-y-3">
           <TaskSeparator text="Tarde" icon={<CloudSunIcon />} />
           {tasksAfternoon?.map((task) => (
-            <TaskItem
-              task={task}
-              key={task.id}
-              onSuccess={handleDeleteTask}
-              handleStatus={handleStatusTask}
-            />
+            <TaskItem task={task} key={task.id} />
           ))}
         </div>
         <div className="space-y-3">
           <TaskSeparator text="Noite" icon={<MoonIcon />} />
           {tasksEvening?.map((task) => (
-            <TaskItem
-              task={task}
-              key={task.id}
-              onSuccess={handleDeleteTask}
-              handleStatus={handleStatusTask}
-            />
+            <TaskItem task={task} key={task.id} />
           ))}
         </div>
       </div>
