@@ -32,6 +32,12 @@ const TaskItem = ({ task }: TaskItemProps) => {
     not_started: "text-dark-blue",
   } as const;
 
+  const titleTasks: DefaultColors = {
+    done: "Reiniciar tarefa",
+    in_progress: "Concluir tarefa",
+    not_started: "Iniciar tarefa",
+  };
+
   const { mutate: deleteTask } = useDeleteTask(task.id);
 
   const handleDelete = async () => {
@@ -88,7 +94,9 @@ const TaskItem = ({ task }: TaskItemProps) => {
       <div className="flex items-center gap-3">
         <label
           htmlFor={task.id}
-          className={`relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-md ${checkboxColors[task.status as keyof typeof checkboxColors]}`}
+          title={titleTasks[task.status as keyof typeof titleTasks]}
+          aria-label={titleTasks[task.status as keyof typeof titleTasks]}
+          className={`relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-md ${checkboxColors[task.status as keyof typeof checkboxColors]} `}
         >
           <input
             type="checkbox"
@@ -110,6 +118,8 @@ const TaskItem = ({ task }: TaskItemProps) => {
       </div>
       <div className="flex items-center">
         <Button
+          aria-label="Excluir tarefa"
+          title="Excluir tarefa"
           color="ghost"
           size="small"
           disabled={isLoading}
@@ -124,6 +134,8 @@ const TaskItem = ({ task }: TaskItemProps) => {
         <Link
           to={`/tasks/${task.id}`}
           className="transition-all hover:opacity-75"
+          aria-label="Ver detalhes"
+          title="Ver detalhes"
         >
           <DetailsIcon className="text-dark-gray" />
         </Link>

@@ -6,6 +6,7 @@ import type { TaskModel } from "../models/TaskModel";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../adapters/showMessage";
 import { useGetTasks } from "../hooks/data/useGetTasks";
+import { tasksQueryKeys } from "../keys/queries";
 interface HeaderProps {
   title: string;
   subtitle: string;
@@ -39,7 +40,7 @@ const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
     const tasksMapped = tasks?.map((task) => {
       deleteTasks(task.id, {
         onSuccess: () => {
-          queryClient.setQueryData(["my-tasks"], () => {
+          queryClient.setQueryData(tasksQueryKeys.getAll(), () => {
             return [];
           });
           showMessage.success("Tarefas deletada com sucesso");

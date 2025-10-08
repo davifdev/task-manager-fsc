@@ -1,25 +1,46 @@
 {
   "tasks": [
     {
-      "id": "6d1cbb03-3e36-42ea-b768-efee1e01775a",
-      "title": "Corrida Matinal",
+      "id": "1b820f70-9f33-44c8-8086-196591bd5b2a",
+      "title": "Estudar",
+      "time": "morning",
+      "status": "not_started",
+      "description": "Estudar progamação durante 2 horas"
+    },
+    {
+      "id": "00979510-b3bd-4e8e-b0ce-a610c04b156c",
+      "title": "Corrida",
       "time": "morning",
       "status": "not_started",
       "description": "Correr 5km pela manhã"
     },
     {
-      "id": "1eb1a74e-5ccf-4808-8595-307f9946e81f",
+      "id": "150f5817-05e1-4f50-a861-22d4455bf0b1",
+      "title": "Progamar",
+      "time": "afternoon",
+      "status": "not_started",
+      "description": "Progamar 4 horas de foco"
+    },
+    {
+      "id": "b1a892e8-c1ed-461e-9275-2995dd16a701",
       "title": "Criação de Landpages",
       "time": "afternoon",
       "status": "not_started",
       "description": "Criação de landpages do codeboost"
     },
     {
-      "id": "bc8b9d3c-8dd6-4402-b487-31a9e3bdfcd3",
-      "title": "Assistir Aulas ",
+      "id": "30e97fd2-4a8e-4dca-9873-82a9b0de1d84",
+      "title": "Aulas da Faculdade",
       "time": "evening",
       "status": "not_started",
       "description": "Assistir aulas da faculdade"
+    },
+    {
+      "id": "1447482c-0e09-4386-9b4a-52f577949f7a",
+      "title": "Leitura",
+      "time": "evening",
+      "status": "not_started",
+      "description": "Leitura 30 min"
     }
   ]
 }

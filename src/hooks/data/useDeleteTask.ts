@@ -1,20 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TaskModel } from "../../models/TaskModel";
+import { taskMutationKeys } from "../../keys/mutations";
+import { tasksQueryKeys } from "../../keys/queries";
+import { api } from "../../lib/axios";
 
 export const useDeleteTask = (taskId?: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["deleteTask", taskId],
+    mutationKey: taskMutationKeys.delete(taskId),
     mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw Error();
-      }
-      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-        return oldTasks.filter((oldTask) => oldTask.id !== taskId);
-      });
+      const { data: deleteTask } = await api.delete(`tasks/${taskId}`);
+      return deleteTask;
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(
+        tasksQueryKeys.getAll(),
+        (oldTasks: TaskModel[]) => {
+          return oldTasks.filter((oldTask) => oldTask.id !== taskId);
+        }
+      );
     },
   });
 };

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-
 interface ErrorMessageProps {
   children: ReactNode;
 }

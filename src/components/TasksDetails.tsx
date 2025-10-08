@@ -33,7 +33,7 @@ const TasksDetails = () => {
     },
   });
 
-  const { data: task } = useGetTask(reset, taskId);
+  const { data: task } = useGetTask((task) => reset(task), taskId);
 
   const backPage = () => {
     navigate(-1);
@@ -79,6 +79,8 @@ const TasksDetails = () => {
       <div className="flex items-end justify-between">
         <div className="space-y-6">
           <button
+            aria-label="Voltar"
+            title="Voltar"
             className="bg-primary flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-all hover:opacity-70"
             onClick={backPage}
           >
@@ -106,6 +108,8 @@ const TasksDetails = () => {
         </div>
         <div>
           <Button
+            title="Excluir tarefa"
+            aria-label="Excluir tarefa"
             size="small"
             color="danger"
             disabled={isSubmitting}
@@ -163,6 +167,8 @@ const TasksDetails = () => {
         </div>
         <div className="mt-6 flex justify-end">
           <Button
+            title="Atualizar tarefa"
+            aria-label="Atualizar tarefa"
             color="primary"
             size="large"
             disabled={isSubmitting}

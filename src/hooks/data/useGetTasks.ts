@@ -1,16 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import type { TaskModel } from "../../models/TaskModel";
+import { tasksQueryKeys } from "../../keys/queries";
+import { api } from "../../lib/axios";
 
 export const useGetTasks = () => {
   return useQuery<TaskModel[]>({
-    queryKey: ["my-tasks"],
+    queryKey: tasksQueryKeys.getAll(),
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/tasks");
-      const tasks = await response.json();
-      if (!response.ok) {
-        throw Error();
-      }
-      return tasks;
+      const { data: task } = await api.get("/tasks");
+      return task;
     },
   });
 };
