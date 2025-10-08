@@ -12,8 +12,9 @@ import InputSelect from "./InputSelect";
 import { showMessage } from "../adapters/showMessage";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { FormValues } from "../models/FormValues";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { TaskModel } from "../models/TaskModel";
+import { useUpdateTask } from "../hooks/data/useUpdateTask";
+import { useDeleteTask } from "../hooks/data/useDeleteTask";
+import { useGetTask } from "../hooks/data/useGetTask";
 
 const TasksDetails = () => {
   const { taskId } = useParams();
@@ -32,45 +33,13 @@ const TasksDetails = () => {
     },
   });
 
-  const { data: task } = useQuery({
-    queryKey: ["taskId", taskId],
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
-      const task = await response.json();
-      reset({
-        title: task.title,
-        time: task.time,
-        description: task.description,
-      });
-      return task;
-    },
-  });
+  const { data: task } = useGetTask(reset, taskId);
 
   const backPage = () => {
     navigate(-1);
   };
 
-  const queryClient = useQueryClient();
-  const { mutate: updateTask } = useMutation({
-    mutationKey: ["uptade-task", taskId],
-    mutationFn: async (taskUpdated: FormValues) => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(taskUpdated),
-      });
-
-      if (!response.ok) {
-        throw Error();
-      }
-
-      const newTask = await response.json();
-      return newTask;
-    },
-  });
-
+  const { mutate: updateTask } = useUpdateTask(taskId);
   const handleUpdateTask: SubmitHandler<FormValues> = async (data) => {
     const title = data.title;
     const time = data.time;
@@ -84,7 +53,6 @@ const TasksDetails = () => {
 
     updateTask(taskUpdated, {
       onSuccess: () => {
-        queryClient.refetchQueries({ queryKey: ["taskId", taskId] });
         showMessage.success("Tarefa atualizada com sucesso");
       },
       onError: () => {
@@ -93,23 +61,7 @@ const TasksDetails = () => {
     });
   };
 
-  const { mutate: deleteTask } = useMutation({
-    mutationKey: ["deleteTask", taskId],
-    mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw Error();
-      }
-      const deleteTask = await response.json();
-
-      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-        return oldTasks.filter((oldTask) => oldTask.id !== deleteTask.id);
-      });
-    },
-  });
-
+  const { mutate: deleteTask } = useDeleteTask(taskId);
   const handleDelete = async () => {
     deleteTask(undefined, {
       onSuccess: () => {
@@ -135,7 +87,7 @@ const TasksDetails = () => {
           <div className="space-y-2">
             <div className="flex items-center gap-1">
               <Link
-                to="/"
+                to="/tasks"
                 className="text-text-gray text-xs transition-all hover:opacity-70"
               >
                 Minhas Tarefas

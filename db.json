@@ -1,25 +1,25 @@
 {
   "tasks": [
     {
-      "id": "84b1d277-957c-44d2-aa5f-c6a09a37c12d",
-      "title": "Estudar Progamação",
+      "id": "6d1cbb03-3e36-42ea-b768-efee1e01775a",
+      "title": "Corrida Matinal",
       "time": "morning",
-      "status": "in_progress",
-      "description": "Estudar progamação durante 3 horas"
+      "status": "not_started",
+      "description": "Correr 5km pela manhã"
     },
     {
-      "id": "0afb6e55-5f10-432b-af57-d17f624b3f89",
-      "title": "Leitura Noturna",
-      "time": "evening",
-      "status": "in_progress",
-      "description": "Leitura noturna"
-    },
-    {
-      "id": "197df9d8-4fc6-40bd-8e4e-a487b2bf5a68",
-      "title": "Criar Landpages",
+      "id": "1eb1a74e-5ccf-4808-8595-307f9946e81f",
+      "title": "Criação de Landpages",
       "time": "afternoon",
-      "status": "done",
+      "status": "not_started",
       "description": "Criação de landpages do codeboost"
+    },
+    {
+      "id": "bc8b9d3c-8dd6-4402-b487-31a9e3bdfcd3",
+      "title": "Assistir Aulas ",
+      "time": "evening",
+      "status": "not_started",
+      "description": "Assistir aulas da faculdade"
     }
   ]
 }

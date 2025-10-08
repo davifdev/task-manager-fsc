@@ -5,7 +5,8 @@ import Button from "./Button";
 import { showMessage } from "../adapters/showMessage";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDeleteTask } from "../hooks/data/useDeleteTask";
+import { useUpdateTask } from "../hooks/data/useUpdateTask";
 interface TaskItemProps {
   task: TaskModel;
 }
@@ -31,21 +32,7 @@ const TaskItem = ({ task }: TaskItemProps) => {
     not_started: "text-dark-blue",
   } as const;
 
-  const queryClient = useQueryClient();
-  const { mutate: deleteTask } = useMutation({
-    mutationKey: ["deleteTask", task.id],
-    mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw Error();
-      }
-      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-        return oldTasks.filter((oldTask) => oldTask.id !== task.id);
-      });
-    },
-  });
+  const { mutate: deleteTask } = useDeleteTask(task.id);
 
   const handleDelete = async () => {
     deleteTask(undefined, {
@@ -77,42 +64,21 @@ const TaskItem = ({ task }: TaskItemProps) => {
       showMessage.success("Tarefa concluída com sucesso");
       return "done";
     }
+
+    return task.status;
   };
 
-  const { mutate: uptadeTask } = useMutation({
-    mutationKey: ["uptade-task", task.id],
-    mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          status: getNewStatus(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw Error();
-      }
-
-      const taskUpdated = await response.json();
-      const stateUpdated = taskUpdated.status;
-
-      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-        return oldTasks.map((oldTask) => {
-          if (oldTask.id === task.id) {
-            return { ...oldTask, status: stateUpdated };
-          }
-          return oldTask;
-        });
-      });
-    },
-  });
+  const { mutate: uptadeTask } = useUpdateTask(task.id);
 
   const handleStatus = () => {
-    uptadeTask(undefined, {
-      onError: () => {
-        showMessage.error("Erro ao atualizar tarefa");
-      },
-    });
+    uptadeTask(
+      { status: getNewStatus() },
+      {
+        onError: () => {
+          showMessage.error("Erro ao atualizar tarefa");
+        },
+      }
+    );
   };
 
   return (

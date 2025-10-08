@@ -2,23 +2,11 @@ import { CloudSunIcon, MoonIcon, SunIcon } from "../assets/icons";
 import Header from "./Header";
 import TaskItem from "./TaskItem";
 import TaskSeparator from "./TaskSeparator";
-import type { TaskModel } from "../models/TaskModel";
-
 import SectionWrapper from "./SectionWrapper";
-import { useQuery } from "@tanstack/react-query";
+import { useGetTasks } from "../hooks/data/useGetTasks";
 
 const Tasks = () => {
-  const { data: tasks } = useQuery<TaskModel[]>({
-    queryKey: ["my-tasks"],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:3000/tasks");
-      const tasks = await response.json();
-      if (!response.ok) {
-        throw Error();
-      }
-      return tasks;
-    },
-  });
+  const { data: tasks } = useGetTasks();
 
   const tasksMorning = tasks?.filter((task) => task.time === "morning");
   const tasksAfternoon = tasks?.filter((task) => task.time === "afternoon");
