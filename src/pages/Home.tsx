@@ -23,6 +23,11 @@ const Home = () => {
               </p>
             </div>
             <div className="space-y-3">
+              {tasks && tasks.length <= 0 && (
+                <p className="text-dark-gray text-sm">
+                  Você não tem tarefas disponíveis.
+                </p>
+              )}
               {tasks?.map((task) => (
                 <TaskItem task={task} key={task.id} />
               ))}
