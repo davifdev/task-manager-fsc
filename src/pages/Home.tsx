@@ -1,23 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
 import Header from "../components/Header";
 import SectionWrapper from "../components/SectionWrapper";
 import Sidebar from "../components/Sidebar";
 import TaskItem from "../components/TaskItem";
-import type { TaskModel } from "../models/TaskModel";
 import DashboardItems from "../components/DashboardItems";
+import { useGetTasks } from "../hooks/data/useGetTasks";
 
 const Home = () => {
-  const { data: tasks } = useQuery<TaskModel[]>({
-    queryKey: ["my-tasks"],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:3000/tasks");
-      const tasks = await response.json();
-      if (!response.ok) {
-        throw Error();
-      }
-      return tasks;
-    },
-  });
+  const { data: tasks } = useGetTasks();
 
   return (
     <div className="flex">

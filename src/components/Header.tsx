@@ -3,7 +3,9 @@ import { AddIcon, TrashIcon } from "../assets/icons";
 import AddTaskDialog from "./AddTaskDialog";
 import Button from "./Button";
 import type { TaskModel } from "../models/TaskModel";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { showMessage } from "../adapters/showMessage";
+import { useGetTasks } from "../hooks/data/useGetTasks";
 interface HeaderProps {
   title: string;
   subtitle: string;
@@ -15,6 +17,40 @@ const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
 
   const handleClose = () => {
     setIsOpen(false);
+  };
+
+  const { data: tasks } = useGetTasks();
+
+  const queryClient = useQueryClient();
+  const { mutate: deleteTasks } = useMutation({
+    mutationKey: ["deleteTasks"],
+    mutationFn: async (taskId: string) => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw Error();
+      }
+    },
+  });
+
+  const handleDeleteAll = () => {
+    const tasksMapped = tasks?.map((task) => {
+      deleteTasks(task.id, {
+        onSuccess: () => {
+          queryClient.setQueryData(["my-tasks"], () => {
+            return [];
+          });
+          showMessage.success("Tarefas deletada com sucesso");
+        },
+        onError: () => {
+          showMessage.error("Erro ao deletar Tarefas");
+        },
+      });
+    });
+
+    return tasksMapped;
   };
 
   return (
@@ -29,6 +65,7 @@ const Header = ({ title, subtitle, handleSubmit }: HeaderProps) => {
           size="small"
           title="Excluir Tarefas"
           aria-label="Excluir Tarefas"
+          onClick={handleDeleteAll}
         >
           Limpar tarefas <TrashIcon />
         </Button>

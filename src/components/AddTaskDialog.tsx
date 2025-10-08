@@ -11,7 +11,7 @@ import { showMessage } from "../adapters/showMessage";
 import { LoaderIcon } from "../assets/icons";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { FormValues } from "../models/FormValues";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAddTask } from "../hooks/data/useAddTask";
 interface AddTaskDialogProps {
   isOpen: boolean;
   handleClose: () => void;
@@ -27,26 +27,7 @@ const AddTaskDialog = ({ isOpen, handleClose }: AddTaskDialogProps) => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
-  const queryClient = useQueryClient();
-  const { mutate: addTask } = useMutation({
-    mutationKey: ["add-task"],
-    mutationFn: async (newTask: TaskModel) => {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      });
-      if (!response.ok) {
-        throw Error();
-      }
-      const createdTask = await response.json();
-      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-        return [...oldTasks, createdTask];
-      });
-    },
-  });
+  const { mutate: addTask } = useAddTask();
 
   const handleAddTask: SubmitHandler<FormValues> = async (data) => {
     const title = data?.title;
