@@ -33,7 +33,7 @@ const TasksDetails = () => {
     },
   });
 
-  const { data: task } = useGetTask(reset, taskId);
+  const { data: task } = useGetTask((task) => reset(task), taskId);
 
   const backPage = () => {
     navigate(-1);

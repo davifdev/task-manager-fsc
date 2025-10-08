@@ -1,25 +1,25 @@
 {
   "tasks": [
     {
-      "id": "6d1cbb03-3e36-42ea-b768-efee1e01775a",
-      "title": "Corrida",
+      "id": "8eb01283-2cd9-4325-9b48-42d450dd1fdc",
+      "title": "Estudar Progamação FSC",
       "time": "morning",
-      "status": "done",
-      "description": "Correr 5km pela manhã"
+      "status": "not_started",
+      "description": "Estudar progamação durante 2 horas"
     },
     {
-      "id": "1eb1a74e-5ccf-4808-8595-307f9946e81f",
+      "id": "247f723f-2001-4272-a9e9-053454a41be0",
       "title": "Criação de Landpages",
       "time": "afternoon",
-      "status": "done",
+      "status": "not_started",
       "description": "Criação de landpages do codeboost"
     },
     {
-      "id": "a268c719-e6e2-4c65-a621-55045985d9f4",
-      "title": "Treino de Musculção",
+      "id": "bfcf4620-20ad-469a-a9b9-6b386ca3ca67",
+      "title": "Assistir Aulas",
       "time": "evening",
       "status": "not_started",
-      "description": "Treinar Musculação"
+      "description": "Assistir aulas da faculdade"
     }
   ]
 }
