@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TaskModel } from "../../models/TaskModel";
+import { taskMutationKeys } from "../../keys/mutations";
+import { tasksQueryKeys } from "../../keys/queries";
 
 export const useUpdateTask = (taskId?: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["uptade-task", taskId],
+    mutationKey: taskMutationKeys.update(taskId),
     mutationFn: async (data: Partial<TaskModel>) => {
-      console.log(data);
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -23,21 +24,23 @@ export const useUpdateTask = (taskId?: string) => {
 
       const taskUpdated = await response.json();
 
-      queryClient.setQueryData(["my-tasks"], (oldTasks: TaskModel[]) => {
-        return oldTasks.map((oldTask) => {
-          if (oldTask.id === taskId) {
-            return taskUpdated;
-          }
-          return oldTask;
-        });
-      });
+      queryClient.setQueryData(
+        tasksQueryKeys.getOne(),
+        (oldTasks: TaskModel[]) => {
+          return oldTasks.map((oldTask) => {
+            if (oldTask.id === taskId) {
+              return taskUpdated;
+            }
+            return oldTask;
+          });
+        }
+      );
 
       return taskUpdated;
     },
 
     onSuccess: (taskUpdated) => {
-      console.log(taskUpdated);
-      queryClient.setQueryData(["taskId", taskId], taskUpdated);
+      queryClient.setQueryData(tasksQueryKeys.getOne(taskId), taskUpdated);
     },
   });
 };
