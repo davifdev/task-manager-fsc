@@ -25,7 +25,7 @@ export const useUpdateTask = (taskId?: string) => {
       const taskUpdated = await response.json();
 
       queryClient.setQueryData(
-        tasksQueryKeys.getOne(),
+        tasksQueryKeys.getAll(),
         (oldTasks: TaskModel[]) => {
           return oldTasks.map((oldTask) => {
             if (oldTask.id === taskId) {

@@ -4,14 +4,14 @@
       "id": "6d1cbb03-3e36-42ea-b768-efee1e01775a",
       "title": "Corrida",
       "time": "morning",
-      "status": "not_started",
+      "status": "done",
       "description": "Correr 5km pela manhã"
     },
     {
       "id": "1eb1a74e-5ccf-4808-8595-307f9946e81f",
       "title": "Criação de Landpages",
       "time": "afternoon",
-      "status": "not_started",
+      "status": "done",
       "description": "Criação de landpages do codeboost"
     },
     {
